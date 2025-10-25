@@ -34,9 +34,13 @@ begin
 	b2 <= stage_input.z.im * stage_input.z.im;
 	ab <= stage_input.z.re * stage_input.z.im;
 
-	mult_reg: process(clock) is
+	mult_reg: process(clock, reset) is
 	begin
-		if rising_edge(clock) then
+		if reset = '0' then
+			a2_out <= (others => '0');
+			b2_out <= (others => '0');
+			ab_out <= (others => '0');
+		elseif rising_edge(clock) then
 			a2_out <= a2;
 			b2_out <= b2;
 			ab_out <= ab;
@@ -48,9 +52,12 @@ begin
 	z2plusc.im <= ab + ab + stage_input.c.im;
 	abs2z <= a2 + b2;
 
-	add_reg: process(clock) is
+	add_reg: process(clock, reset) is
 	begin
-		if rising_edge(clock) then
+		if reset = '0' then
+			z2plusc_out <= (others => '0');
+			abs2z_out <= (others => '0');
+		elseif rising_edge(clock) then
 			z2plusc_out <= z2plusc;
 			abs2z_out <= abs2z;
 		end if;
