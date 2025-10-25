@@ -31,45 +31,58 @@ package vga_data is
 				-- 1920x1080 @ 60 Hz
 				-- clock 148.5 MHz
 				horizontal => (
-						active => ,				-- active area in pixels
-						front_porch => ,		-- in pixels
-						sync_width => ,			-- in pixels
-						back_porch => 			-- in pixels
+						active => 1920,			-- active area in pixels
+						front_porch => 88,		-- in pixels
+						sync_width => 44,		-- in pixels
+						back_porch => 148			-- in pixels
 					),
 				vertical => (
-						active => ,				-- active area in lines
-						front_porch => ,		-- in lines
-						sync_width => ,			-- in lines
-						back_porch => 			-- in lines
+						active => 1080,				-- active area in lines
+						front_porch => 4,			-- in lines
+						sync_width => 5,			-- in lines
+						back_porch => 36 			-- in lines
 					),
 				sync_polarity => active_high
 			), (
 				-- 640x480 @ 60 Hz
 				-- clock 25.175 MHz
 				horizontal => (
-						active => ,
-						front_porch => ,
-						sync_width => ,
-						back_porch => 
+						active => 640,
+						front_porch => 16,
+						sync_width => 96,
+						back_porch => 48
 					),
 				vertical => (
-						active => ,
-						front_porch => ,
-						sync_width => ,
-						back_porch => 
+						active => 480,
+						front_porch => 10,
+						sync_width => 2,
+						back_porch => 33
 					),
-				sync_polarity => 
+				sync_polarity => active_low
 			), (
 				-- add data here
 				-- 800x600 @ 60Hz
 				-- clock 40 MHz
+				horizontal => (
+						active => 800,
+						front_porch => 40,
+						sync_width => 128,
+						back_porch => 88
+					),
+				vertical => (
+						active => 600,
+						front_porch => 1,
+						sync_width => 4,
+						back_porch => 23
+					),
+				sync_polarity => active_high
 			)
 		);
 
 	constant vga_res_1920x1080:	vga_timing := vga_res_data(0);
 	constant vga_res_640x480:	vga_timing := vga_res_data(1);
-	constant vga_res_800x600:	vga_timing := ;	-- TODO: initialize
-	constant vga_res_default:	vga_timing := ;	-- TODO: initialize to your
+	constant vga_res_800x600:	vga_timing := vga_res_data(2);	-- TODO: initialize
+	constant vga_res_default:	vga_timing := vga_res_640x480;	-- TODO: initialize to your
 												-- target resolution
 
 	---- TODO: some functions need to be implemented
