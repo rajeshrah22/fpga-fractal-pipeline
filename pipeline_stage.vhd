@@ -17,12 +17,27 @@ entity pipeline_stage is
 end entity pipeline_stage;
 
 architecture rtl of pipeline_stage is
-
+	signal a2: ads_sfixed;
+	signal b2: ads_sfixed;
+	signal ab: ads_sfixed;
 begin
-
-	stage: process(clock, reset) is
+	part1: process(clock, reset) is -- can we instead do this in the falling edge of the clock in the same process?
 	begin
 		if reset = '0' then
+			a2 <= to_ads_sfixed(0);
+			b2 <= to_ads_sfixed(0);
+			ab <= to_ads_sfixed(0);
+		elseif rising_edge(clock) then
+			a2 <= stage_input.z.re * stage_input.z.re;
+			b2 <= stage_input.z.im * stage_input.z.im;
+			ab <= stage_input.z.re * stage_input.z.im;
+		end if;
+	end process part1;
+
+	part2: process(clock, reset) is
+	begin
+		if reset = '0' then
+			stage_output <= (others => '0');
 		elseif rising_edge(clock) then
 			if stage_input.stage_overflow then
 				stage_output.stage_data <= stage_input.stage_data;
@@ -30,13 +45,13 @@ begin
 				stage_output.stage_data <= stage_input.stage_number;
 			end if;
 			stage_output.c <= stage_input.c;
-			stage_output.z <= stage_input.z * stage_input.z + stage_input.c;
-			if abs2(stage_input.z) > threshold then
+			stage_output.z.re <= a2 - b2 + 2 * ab;
+			if (a2 + b2) > threshold then
 				stage_output.stage_overflow <= stage_input.stage_overflow;
 			else
 				stage_output.stage_overflow <= false;
 			end if;
 		end if;
-	end process stage;
+	end process part2;
 end architecture rtl;
 
