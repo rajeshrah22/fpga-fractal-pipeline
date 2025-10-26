@@ -200,7 +200,7 @@ package body vga_data is
 			vga_res:	in	vga_timing := vga_res_default
 		) return boolean is
 	begin
-		-- TODO: implement
+		return point.y < vga_res.vertical.active;
 	end function y_visible;
 
 	function point_visible (
@@ -208,7 +208,7 @@ package body vga_data is
 			vga_res:	in	vga_timing := vga_res_default
 		) return boolean is
 	begin
-		-- TODO: implement
+		return y_visible(point) and x_visible(point);
 	end function point_visible;
 
 	function make_coordinate (
@@ -234,8 +234,12 @@ package body vga_data is
 
 		if ret.x = timing_range(vga_res, horizontal) then
 			ret.x := 0;
+			ret.y := ret.y + 1; -- increment y if at end of line
 		end if;
 
+		if ret.y = timing_range(vga_res, vertical) then
+			ret.y := 0;
+		end if;
 
 		return ret;
 	end function next_coordinate;
@@ -253,7 +257,7 @@ package body vga_data is
 			vga_res:	in	vga_timing := vga_res_default
 		) return std_logic is
 	begin
-		-- TODO: implement
+		return do_sync(point, vga_res, vertical);
 	end function do_vertical_sync;
 
 end package body vga_data;

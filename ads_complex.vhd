@@ -97,6 +97,4 @@ package body ads_complex_pkg is
 		return ret;
 	end function abs2;
 
-	-- implement all other functions here
-
 end package body ads_complex_pkg;
