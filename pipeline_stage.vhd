@@ -3,6 +3,10 @@ use ieee.std_logic_1164.all;
 
 use work.pipeline_pkg.all;
 
+library ads;
+use ads.ads_complex.all;
+use ads.ads_sfixed.all;
+
 entity pipeline_stage is
 	generic (
 		threshold: ads_sfixed;
