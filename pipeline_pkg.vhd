@@ -8,5 +8,6 @@ package pipeline_pkg is
 	    c:    ads_complex;
 	    stage_data:    natural
 	    stage_overflow:    boolean;
+	    stage_valid: boolean;
 	end record pipeline_data;
 end package pipeline_pkg;

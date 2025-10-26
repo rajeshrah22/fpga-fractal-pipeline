@@ -85,6 +85,7 @@ begin
 	end process add_reg;
 
 	-- comparison and output
+	-- TODO: modify stage to take in stage_data.stage_valid
 	if stage_overflow_out2 then
 		stage_output.stage_data <= stage_data_out2;
 	else
