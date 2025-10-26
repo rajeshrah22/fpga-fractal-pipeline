@@ -23,11 +23,19 @@ architecture rtl of pipeline_stage is
 	signal a2_out: ads_sfixed;
 	signal b2_out: ads_sfixed;
 	signal ab_out: ads_sfixed;
+	signal cout1: ads_complex;
 
 	signal z2plusc: ads_complex;
 	signal abs2z: ads_sfixed;
 	signal z2plusc_out: ads_complex;
 	signal abs2z_out: ads_sfixed;
+	signal cin2: ads_complex;
+	signal cout2: ads_complex;
+
+	signal stage_data_out1: natural;
+	signal stage_data_out1: natural;
+	signal stage_overflow_out2: boolean;
+	signal stage_overflow_out2: boolean;
 begin
 	-- multiplication
 	a2 <= stage_input.z.re * stage_input.z.re;
@@ -44,12 +52,15 @@ begin
 			a2_out <= a2;
 			b2_out <= b2;
 			ab_out <= ab;
+			cout1 <= stage_input.c;
+			stage_data_out1 <= stage_input.stage_data;
+			stage_overflow_out1 <= stage_input.stage_overflow;
 		end if;
 	end process mult_reg;
 
 	-- addition
-	z2plusc.re <= a2 - b2 + stage_input.c.re;
-	z2plusc.im <= ab + ab + stage_input.c.im;
+	z2plusc.re <= a2 - b2 + cout1.re;
+	z2plusc.im <= ab + ab + cout1.im;
 	abs2z <= a2 + b2;
 
 	add_reg: process(clock, reset) is
@@ -57,26 +68,32 @@ begin
 		if reset = '0' then
 			z2plusc_out <= (others => '0');
 			abs2z_out <= (others => '0');
+			stage_data_out2 <= (others => '0');
+			stage_overflow_out2 <= (others => '0');
+			cout2 <= (others => '0');
 		elseif rising_edge(clock) then
 			z2plusc_out <= z2plusc;
 			abs2z_out <= abs2z;
+			stage_data_out2 <= stage_input.stage_data;
+			stage_overflow_out2 <= stage_input.stage_overflow;
+			cout2 <= cout1;
 		end if;
 	end process add_reg;
 
 	-- comparison and output
-	if stage_input.stage_overflow then
-		stage_output.stage_data <= stage_input.stage_data;
+	if stage_overflow_out2 then
+		stage_output.stage_data <= stage_data_out2;
 	else
-		stage_output.stage_data <= stage_input.stage_number;
+		stage_output.stage_data <= stage_number;
 	end if;
 
 	if abs2z_out > threshold then
-		stage_output.stage_overflow <= stage_input.stage_overflow;
+		stage_output.stage_overflow <= stage_overflow_out2;
 	else
 		stage_output.stage_overflow <= false;
 	end if;
 
-	stage_output.c <= stage_input.c;
+	stage_output.c <= cout2;
 	stage_output.z <= z2plusc_out;
 end architecture rtl;
 
