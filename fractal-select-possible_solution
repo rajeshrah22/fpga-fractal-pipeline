@@ -1,0 +1,88 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.ads_fixed.all;
+use work.ads_complex.all;
+
+entity fractal_select is
+  port(
+    clk       : in  std_logic;
+    reset     : in  std_logic;
+    sw9       : in  std_logic;          -- fractal select: 0=Mandelbrot, 1=Julia
+    pixel_re  : in  ads_sfixed;         -- from map_coordinate
+    pixel_im  : in  ads_sfixed;
+    julia_sel : in  std_logic_vector(1 downto 0);  -- optional: choose seed
+    z0_out    : out ads_complex;
+    c_out     : out ads_complex
+  );
+end entity;
+
+architecture rtl of fractal_select is
+
+  -- Define a few Julia constants
+  constant julia_c0 : ads_complex := (
+    re => to_ads_fixed(-0.7),
+    im => to_ads_fixed(0.27015)
+  );
+  constant julia_c1 : ads_complex := (
+    re => to_ads_fixed(0.285),
+    im => to_ads_fixed(0.01)
+  );
+  constant julia_c2 : ads_complex := (
+    re => to_ads_fixed(-0.8),
+    im => to_ads_fixed(0.156)
+  );
+
+  signal c_sel : ads_complex;
+
+begin
+
+  -- Select which Julia constant to use
+  with julia_sel select
+    c_sel <= julia_c0 when "00",
+             julia_c1 when "01",
+             julia_c2 when "10",
+             julia_c0 when others;
+
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      if reset = '1' then
+        z0_out <= (re => to_ads_fixed(0.0), im => to_ads_fixed(0.0));
+        c_out  <= (re => to_ads_fixed(0.0), im => to_ads_fixed(0.0));
+      else
+        if sw9 = '0' then
+          -- Mandelbrot mode
+          z0_out <= (re => to_ads_fixed(0.0), im => to_ads_fixed(0.0));
+          c_out.re <= pixel_re;
+          c_out.im <= pixel_im;
+        else
+          -- Julia mode
+          z0_out.re <= pixel_re;
+          z0_out.im <= pixel_im;
+          c_out <= c_sel;
+        end if;
+      end if;
+    end if;
+  end process;
+
+end architecture;
+----------------------------------------------------------------------------top level
+
+signal z0_sel, c_sel : ads_complex;
+
+fractal_select_inst: entity work.fractal_select
+  port map(
+    clk       => clk,
+    reset     => reset,
+    sw9       => sw(9),
+    pixel_re  => map_re,
+    pixel_im  => map_im,
+    julia_sel => sw(8 downto 7), -- optional
+    z0_out    => z0_sel,
+    c_out     => c_sel
+  );
+
+-- Then feed these to your pipeline:
+pipeline_stage_in.z <= z0_sel;
+pipeline_stage_in.c <= c_sel;
