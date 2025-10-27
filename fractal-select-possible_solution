@@ -44,27 +44,6 @@ begin
              julia_c2 when "10",
              julia_c0 when others;
 
-  process(clk)
-  begin
-    if rising_edge(clk) then
-      if reset = '1' then
-        z0_out <= (re => to_ads_fixed(0.0), im => to_ads_fixed(0.0));
-        c_out  <= (re => to_ads_fixed(0.0), im => to_ads_fixed(0.0));
-      else
-        if sw9 = '0' then
-          -- Mandelbrot mode
-          z0_out <= (re => to_ads_fixed(0.0), im => to_ads_fixed(0.0));
-          c_out.re <= pixel_re;
-          c_out.im <= pixel_im;
-        else
-          -- Julia mode
-          z0_out.re <= pixel_re;
-          z0_out.im <= pixel_im;
-          c_out <= c_sel;
-        end if;
-      end if;
-    end if;
-  end process;
 
 end architecture;
 ----------------------------------------------------------------------------top level
