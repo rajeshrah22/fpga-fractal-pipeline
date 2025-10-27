@@ -28,6 +28,7 @@ architecture toplevel of fpga_fractal_pipeline is
 	signal v_sync: std_logic;
 	signal h_sync_to_pipe: std_logic;
 	signal v_sync_to_pipe: std_logic;
+	signal c_to_fractal_select: ads_complex;
 
 	type pipeline_data_array_t is array (natural range <>) of pipeline_data;
 	signal pipeline: pipeline_data_array_t(0 to stage_count - 1);
@@ -42,7 +43,13 @@ begin
 			v_sync => v_sync
 		);
 
-	-- first input should come from vga_fsm
+	co_map: entity work.coordinate_map(co_map)
+		port map (
+			vga_coordinate => coordinate_out,
+			complex_coordinate => c_to_fractal_select
+		);
+
+	-- first input should come from fractal select
 	-- last output shoudl go to coloring circuit
 	some_pipeline: for idx in 1 to stage_count - 1 generate
 		pipeline_stage_x: entity work.pipeline_stage
@@ -71,4 +78,6 @@ begin
 			h_sync_out => h_sync_to_pipe,
 			v_sync_out => v_sync_to_pipe
 		);
+
+	-- place color circuit
 end architecture toplevel;
