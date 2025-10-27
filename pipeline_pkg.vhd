@@ -1,6 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
+library ads;
+use ads.ads_complex_pkg.all;
+
 package pipeline_pkg is
 	type pipeline_data is
 	record

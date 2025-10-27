@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library ads;
-use ads.ads_complex.all;
-use ads.ads_sfixed.all;
+use ads.ads_complex_pkg.all;
+use ads.ads_fixed.all;
 
 library vga;
 use vga.vga_data.all;
@@ -31,7 +31,7 @@ begin
 		if reset = '0' then
 			h_sync_register <= (others => '0');
 			v_sync_register <= (others => '0');
-		elsif rising_edge(clock) then
+		elsif rising_edge(vga_clock) then
 			h_sync_register <= h_sync_register(stage_count - 2 downto 0) & h_sync_in;
 			v_sync_register <= v_sync_register(stage_count - 2 downto 0) & v_sync_in;
 		end if;

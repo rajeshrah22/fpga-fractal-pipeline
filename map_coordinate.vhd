@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library ads;
-use ads.ads_complex.all;
-use ads.ads_sfixed.all;
+use ads.ads_complex_pkg.all;
+use ads.ads_fixed.all;
 
 library vga;
 use vga.vga_data.all;
@@ -25,6 +25,6 @@ architecture co_map of coordinate_map is
 	constant x_offset: natural := vga_res.horizontal.active / 2;
 	constant y_offset: natural := vga_res.horizontal.active / 2;
 begin
-	complex_coordinate.re <= vga_coordinate.x - x_offset;
-	complex_coordinate.im <= vga_coordinate.y - y_offset;
+	complex_coordinate.re <= to_ads_sfixed(vga_coordinate.x - x_offset);
+	complex_coordinate.im <= to_ads_sfixed(vga_coordinate.y - y_offset);
 end architecture co_map;

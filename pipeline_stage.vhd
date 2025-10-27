@@ -4,8 +4,8 @@ use ieee.std_logic_1164.all;
 use work.pipeline_pkg.all;
 
 library ads;
-use ads.ads_complex.all;
-use ads.ads_sfixed.all;
+use ads.ads_complex_pkg.all;
+use ads.ads_fixed.all;
 
 entity pipeline_stage is
 	generic (
@@ -13,8 +13,8 @@ entity pipeline_stage is
 		stage_number: natural
 	);
 	port (
-		reset: in std_logic;
 		clock: in std_logic;
+		reset: in std_logic;
 		stage_input: in pipeline_data;
 		stage_output: out pipeline_data
 	);
@@ -38,7 +38,7 @@ architecture rtl of pipeline_stage is
 
 	signal stage_data_out1: natural;
 	signal stage_data_out2: natural;
-	signal stage_overflow_out2: boolean;
+	signal stage_overflow_out1: boolean;
 	signal stage_overflow_out2: boolean;
 begin
 	-- multiplication

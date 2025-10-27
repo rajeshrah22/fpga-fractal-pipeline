@@ -34,9 +34,9 @@ package ads_complex_pkg is
 		) return ads_complex;
 
 	-- returns the complex conjugate of arg
-	function conj (
-			arg: in ads_complex
-		) return ads_complex;
+	-- function conj (
+	--		arg: in ads_complex
+	--	) return ads_complex;
 
 	-- returns || arg || ** 2
 	function abs2 (
@@ -50,6 +50,16 @@ package ads_complex_pkg is
 end package ads_complex_pkg;
 
 package body ads_complex_pkg is
+	function ads_cmplx (
+		re, im: in ads_sfixed
+	) return ads_complex
+	is
+		variable ret: ads_complex;
+	begin
+		ret.re := re;
+		ret.im := im;
+		return ret;
+	end function ads_cmplx;
 
 	-- function implementations
 	function "+" (
