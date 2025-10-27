@@ -10,13 +10,13 @@ use ads.ads_sfixed.all;
 entity pipeline_stage is
 	generic (
 		threshold: ads_sfixed;
-		stage_number: natural;
+		stage_number: natural
 	);
 	port (
 		reset: in std_logic;
 		clock: in std_logic;
 		stage_input: in pipeline_data;
-		stage_output: out pipeline_data;
+		stage_output: out pipeline_data
 	);
 end entity pipeline_stage;
 
@@ -37,7 +37,7 @@ architecture rtl of pipeline_stage is
 	signal cout2: ads_complex;
 
 	signal stage_data_out1: natural;
-	signal stage_data_out1: natural;
+	signal stage_data_out2: natural;
 	signal stage_overflow_out2: boolean;
 	signal stage_overflow_out2: boolean;
 begin
@@ -52,7 +52,11 @@ begin
 			a2_out <= (others => '0');
 			b2_out <= (others => '0');
 			ab_out <= (others => '0');
-		elseif rising_edge(clock) then
+			cout1.re <= (others => '0');
+			cout1.im <= (others => '0');
+			stage_data_out1 <= 0;
+			stage_overflow_out1 <= false;
+		elsif rising_edge(clock) then
 			a2_out <= a2;
 			b2_out <= b2;
 			ab_out <= ab;
@@ -63,19 +67,21 @@ begin
 	end process mult_reg;
 
 	-- addition
-	z2plusc.re <= a2 - b2 + cout1.re;
-	z2plusc.im <= ab + ab + cout1.im;
-	abs2z <= a2 + b2;
+	z2plusc.re <= a2_out - b2_out + cout1.re;
+	z2plusc.im <= ab_out + ab_out + cout1.im;
+	abs2z <= a2_out + b2_out;
 
 	add_reg: process(clock, reset) is
 	begin
 		if reset = '0' then
-			z2plusc_out <= (others => '0');
+			z2plusc_out.re <= (others => '0');
+			z2plusc_out.im <= (others => '0');
 			abs2z_out <= (others => '0');
-			stage_data_out2 <= (others => '0');
-			stage_overflow_out2 <= (others => '0');
-			cout2 <= (others => '0');
-		elseif rising_edge(clock) then
+			stage_data_out2 <= 0;
+			stage_overflow_out2 <= false;
+			cout2.re <= (others => '0');
+			cout2.im <= (others => '0');
+		elsif rising_edge(clock) then
 			z2plusc_out <= z2plusc;
 			abs2z_out <= abs2z;
 			stage_data_out2 <= stage_input.stage_data;
@@ -86,17 +92,9 @@ begin
 
 	-- comparison and output
 	-- TODO: modify stage to take in stage_data.stage_valid
-	if stage_overflow_out2 then
-		stage_output.stage_data <= stage_data_out2;
-	else
-		stage_output.stage_data <= stage_number;
-	end if;
+	stage_output.stage_data <= stage_data_out2 when stage_overflow_out2 else stage_number;
 
-	if abs2z_out > threshold then
-		stage_output.stage_overflow <= stage_overflow_out2;
-	else
-		stage_output.stage_overflow <= false;
-	end if;
+	stage_output.stage_overflow <= stage_overflow_out2 when abs2z_out > threshold else false;
 
 	stage_output.c <= cout2;
 	stage_output.z <= z2plusc_out;

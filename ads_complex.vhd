@@ -92,7 +92,7 @@ package body ads_complex_pkg is
 		) return ads_sfixed
 	is
 		variable ret: ads_sfixed;
-	begim
+	begin
 		ret := arg.re * arg.re + arg.im * arg.im;
 		return ret;
 	end function abs2;

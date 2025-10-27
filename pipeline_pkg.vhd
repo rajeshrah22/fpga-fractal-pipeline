@@ -6,7 +6,7 @@ package pipeline_pkg is
 	record
 	    z:    ads_complex;
 	    c:    ads_complex;
-	    stage_data:    natural
+	    stage_data:    natural;
 	    stage_overflow:    boolean;
 	    stage_valid: boolean;
 	end record pipeline_data;

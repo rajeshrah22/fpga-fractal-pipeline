@@ -35,7 +35,7 @@ begin
 			point <= make_coordinate(0, 0);
 			point_valid <= true;
 			curr_coordinate <= make_coordinate(0, 0);
-		elseif rising_edge(clock) then
+		elsif rising_edge(clock) then
 			h_sync <= do_horizontal_sync(curr_coordinate);
 			v_sync <= do_vertical_sync(curr_coordinate);
 			point <= curr_coordinate;

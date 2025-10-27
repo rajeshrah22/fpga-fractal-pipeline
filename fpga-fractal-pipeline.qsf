@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "MAX 10"
 set_global_assignment -name DEVICE 10M50DAF484C6GES
-set_global_assignment -name TOP_LEVEL_ENTITY pipeline_stage
+set_global_assignment -name TOP_LEVEL_ENTITY fpga_fractal_pipeline
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 24.1STD.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:13:50  OCTOBER 23, 2025"
 set_global_assignment -name LAST_QUARTUS_VERSION "24.1std.0 Lite Edition"
@@ -55,6 +55,10 @@ set_global_assignment -name VHDL_FILE color_data.vhd
 set_global_assignment -name VHDL_FILE ads_fixed.vhd
 set_global_assignment -name VHDL_FILE ads_complex.vhd
 set_global_assignment -name VHDL_FILE pipeline_stage.vhd
+set_global_assignment -name VHDL_FILE sync_shift.vhd
+set_global_assignment -name VHDL_FILE pipeline_pkg.vhd
+set_global_assignment -name VHDL_FILE map_coordinate.vhd
+set_global_assignment -name VHDL_FILE fpga_fractal_pipeline.vhd
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
