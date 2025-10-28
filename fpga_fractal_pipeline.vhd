@@ -10,7 +10,7 @@ use ads.ads_fixed.all;
 library vga;
 use vga.vga_data.all;
 
-entity fpga_fractal_pipeline is
+entity fpga_fractal_pipeline2 is
 	generic (
 		stage_count: natural := 16
 	);
@@ -19,9 +19,9 @@ entity fpga_fractal_pipeline is
 		reset: in std_logic;
 		fractal_select: in std_logic
 	);
-end entity fpga_fractal_pipeline;
+end entity fpga_fractal_pipeline2;
 
-architecture toplevel of fpga_fractal_pipeline is
+architecture toplevel of fpga_fractal_pipeline2 is
 	signal coordinate_out: coordinate;
 	signal point_valid: boolean;
 	signal h_sync: std_logic;
