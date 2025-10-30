@@ -30,6 +30,7 @@ architecture toplevel of test_toplevel is
 	signal coordinate_out: coordinate;
 	signal point_valid: boolean;
 	signal vga_clock: std_logic;
+	signal complex_coordinate: ads_complex;
 begin
 	pll_inst : entity work.pll
 		port map (
@@ -46,6 +47,20 @@ begin
 			h_sync => h_sync,
 			v_sync => v_sync
 		);
+
+	co_map: entity work.coordinate_map(co_map)
+		port map (
+			clock => vga_clock,
+			reset => reset,
+			vga_coordinate => coordinate_out,
+			complex_coordinate => complex_coordinate
+		);
+
+	-- fractal select
+
+	-- pipeline
+
+	-- coloring
 
 	vga_color <= color_blue when point_valid else color_black;
 end architecture toplevel;

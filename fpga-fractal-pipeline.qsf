@@ -58,7 +58,6 @@ set_global_assignment -name VHDL_FILE pipeline_stage.vhd
 set_global_assignment -name VHDL_FILE sync_shift.vhd
 set_global_assignment -name VHDL_FILE pipeline_pkg.vhd
 set_global_assignment -name VHDL_FILE map_coordinate.vhd
-set_global_assignment -name VHDL_FILE fpga_fractal_pipeline.vhd
 set_global_assignment -name QIP_FILE pll.qip
 set_global_assignment -name VHDL_FILE test_toplevel.vhd
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
