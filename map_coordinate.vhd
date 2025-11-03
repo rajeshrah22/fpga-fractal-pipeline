@@ -11,8 +11,8 @@ use vga.vga_data.all;
 entity coordinate_map is
 	generic (
 		vga_res: vga_timing := vga_res_default;
-		re_height: real := 4.0;
-		im_width: real := 3.0
+		re_width: real := 4.0;
+		im_height: real := 3.0
 	);
 	port (
 		clock: in std_logic;
@@ -30,27 +30,20 @@ architecture co_map of coordinate_map is
 	constant y_height: natural := vga_res.vertical.active;
 	constant x_center: natural := x_width / 2;
 	constant y_center: natural := y_height / 2;
-	constant re_scale: real := re_height / real(x_width);
-	constant im_scale: real := im_width / real(y_height);
+	constant re_scale: ads_sfixed := to_ads_sfixed(re_width / real(x_width));
+	constant im_scale: ads_sfixed := to_ads_sfixed(-im_height / real(y_height));
 
-	signal mapped_coordinate_next: ads_complex;
-	signal mapped_coordinate: ads_complex;
+	constant im_max: ads_sfixed := to_ads_sfixed(im_height / 2.0);
+	constant re_min: ads_sfixed := to_ads_sfixed(-re_width / 2.0);
 begin
-	-- Purely combinational version
-	-- complex_coordinate.re <= to_ads_sfixed((vga_coordinate.x - x_center) * to_ads_sfixed(re_scale);
-	-- complex_coordinate.im <= to_ads_sfixed(vga_coordinate.y - y_center) * to_ads_sfixed(im_scale);
-	mapped_coordinate_next.re <= to_ads_sfixed(vga_coordinate.x - x_center) * to_ads_sfixed(re_scale);
-	mapped_coordinate_next.im <= to_ads_sfixed(vga_coordinate.y - y_center) * to_ads_sfixed(im_scale);
-
 	process(clock, reset)
 	begin
 		if reset = '0' then
-			mapped_coordinate.re <= to_ads_sfixed(0);
-			mapped_coordinate.im <= to_ads_sfixed(0);
+			complex_coordinate.re <= to_ads_sfixed(0);
+			complex_coordinate.im <= to_ads_sfixed(0);
 		elsif rising_edge(clock) then
-			mapped_coordinate <= mapped_coordinate_next;
+			complex_coordinate.re <= to_ads_sfixed(vga_coordinate.x) * re_scale + re_min;
+			complex_coordinate.im <= to_ads_sfixed(vga_coordinate.y) * im_scale + im_max;
 		end if;
 	end process;
-
-	complex_coordinate <= mapped_coordinate;
 end architecture co_map;

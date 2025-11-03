@@ -84,8 +84,8 @@ begin
 		elsif rising_edge(clock) then
 			z2plusc_out <= z2plusc;
 			abs2z_out <= abs2z;
-			stage_data_out2 <= stage_input.stage_data;
-			stage_overflow_out2 <= stage_input.stage_overflow;
+			stage_data_out2 <= stage_data_out1;
+			stage_overflow_out2 <= stage_overflow_out1;
 			cout2 <= cout1;
 		end if;
 	end process add_reg;

@@ -6,6 +6,10 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clock;
 set_location_assignment PIN_B8 -to reset;
 set_instance_assignment -name IO_STANDARD "3.3 V SCHMITT TRIGGER" -to reset;
 
+# Fractal select
+set_location_assignment PIN_F15 -to fractal_select
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to fractal_select;
+
 # VGA
 set color_pins { red { AA1 V1 Y2 Y1 }
 		green { W1 T2 R2 R1 }

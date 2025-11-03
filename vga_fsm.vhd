@@ -26,21 +26,22 @@ architecture fsm of vga_fsm is
 begin
 	-- implement methodology to drive outputs here
 	-- use vga_data functions and types to make your life easier
+	point <= curr_coordinate;
+	point_valid <= point_visible(curr_coordinate);
+	h_sync <= do_horizontal_sync(curr_coordinate);
+	v_sync <= do_vertical_sync(curr_coordinate);
+	
 	update_pixel: process(vga_clock, reset) is
 	begin
 		-- double check
 		if reset = '0' then
-			h_sync <= '0';
-			v_sync <= '0';
-			point <= make_coordinate(0, 0);
-			point_valid <= true;
+--			h_sync <= '0';
+--			v_sync <= '0';
+--			point <= make_coordinate(0, 0);
+--			point_valid <= true;
 			curr_coordinate <= make_coordinate(0, 0);
 		elsif rising_edge(vga_clock) then
-			h_sync <= do_horizontal_sync(curr_coordinate);
-			v_sync <= do_vertical_sync(curr_coordinate);
-			point <= curr_coordinate;
-			point_valid <= point_visible(curr_coordinate);
-			curr_coordinate <= next_coordinate(curr_coordinate);
+			curr_coordinate <= next_coordinate(curr_coordinate);			
 		end if;
 	end process update_pixel;
 

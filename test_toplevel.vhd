@@ -19,7 +19,7 @@ entity test_toplevel is
 	port (
 		clock: in std_logic;
 		reset: in std_logic;
-		fractal_select: in std_logic;
+		f_select: in std_logic;
 		h_sync: out std_logic;
 		v_sync: out std_logic;
 		vga_color: out rgb_color
@@ -31,7 +31,17 @@ architecture toplevel of test_toplevel is
 	signal point_valid: boolean;
 	signal vga_clock: std_logic;
 	signal complex_coordinate: ads_complex;
+
+	type pipeline_data_array_t is array (natural range <>) of pipeline_data;
+	signal pipeline: pipeline_data_array_t(0 to stage_count - 1);
+	
+	signal seed_z, seed_c: ads_complex;
 begin
+	pipeline(0).z <= seed_z;
+	pipeline(0).c <= seed_c;
+	pipeline(0).stage_overflow <= false;
+	pipeline(0).stage_data <= 0;
+
 	pll_inst : entity work.pll
 		port map (
 			inclk0	 => clock,
@@ -56,11 +66,30 @@ begin
 			complex_coordinate => complex_coordinate
 		);
 
-	-- fractal select
+	select_fractal: entity work.fractal_select(fract_slct)
+		port map (
+			clock => vga_clock,
+			reset => reset,
+			f_select => f_select,
+			position => complex_coordinate,
+			c => seed_c,
+			z => seed_z
+		);
 
-	-- pipeline
+	cmplx_pipeline: for idx in 1 to stage_count - 2 generate
+		pipeline_stage_x: entity work.pipeline_stage
+			generic map (
+				threshold => to_ads_sfixed(4),
+				stage_number => idx
+			)
+			port map (
+				clock => clock,
+				reset => reset,
+				stage_input => pipeline(idx),
+				stage_output => pipeline(idx + 1)
+			);
+	end generate cmplx_pipeline;
 
-	-- coloring
 
-	vga_color <= color_blue when point_valid else color_black;
+	vga_color <= color_black when pipeline(stage_count - 1).stage_overflow else color_blue;
 end architecture toplevel;
