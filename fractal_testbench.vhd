@@ -63,7 +63,7 @@ begin
 
     clock <= not clock after clock_period / 2 when not test_done else '0';
 
-    dut: test_toplevel
+    dut: entity work.test_toplevel
         generic map (
             stage_count => 16
         )
