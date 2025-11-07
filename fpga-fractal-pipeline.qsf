@@ -87,19 +87,20 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to v_sync
 set_location_assignment PIN_F15 -to f_select
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to f_select
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-set_global_assignment -name VHDL_FILE vga_fsm.vhd
-set_global_assignment -name VHDL_FILE vga_data.vhd
-set_global_assignment -name VHDL_FILE color_data.vhd
-set_global_assignment -name VHDL_FILE ads_fixed.vhd
-set_global_assignment -name VHDL_FILE ads_complex.vhd
-set_global_assignment -name VHDL_FILE pipeline_stage.vhd
-set_global_assignment -name VHDL_FILE sync_shift.vhd
-set_global_assignment -name VHDL_FILE pipeline_pkg.vhd
-set_global_assignment -name VHDL_FILE map_coordinate.vhd
+set_global_assignment -name VHDL_FILE vga/vga_fsm.vhd
+set_global_assignment -name VHDL_FILE vga/vga_data.vhd
+set_global_assignment -name VHDL_FILE work/color_data.vhd
+set_global_assignment -name VHDL_FILE ads/ads_fixed.vhd
+set_global_assignment -name VHDL_FILE ads/ads_complex.vhd
+set_global_assignment -name VHDL_FILE work/pipeline_stage.vhd
+set_global_assignment -name VHDL_FILE work/sync_shift.vhd
+set_global_assignment -name VHDL_FILE work/pipeline_pkg.vhd
+set_global_assignment -name VHDL_FILE work/map_coordinate.vhd
+set_global_assignment -name VHDL_FILE DE10_LITE/pll.vhd
 set_global_assignment -name QIP_FILE pll.qip
-set_global_assignment -name VHDL_FILE test_toplevel.vhd
+set_global_assignment -name VHDL_FILE work/test_toplevel.vhd
 set_global_assignment -name TCL_SCRIPT_FILE pin_assignment.tcl
-set_global_assignment -name VHDL_FILE fractal_select.vhd
+set_global_assignment -name VHDL_FILE work/fractal_select.vhd
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"

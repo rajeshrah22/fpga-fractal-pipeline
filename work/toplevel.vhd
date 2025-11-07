@@ -48,7 +48,7 @@ begin
 			c0	 => vga_clock
 		);
 
-	vga_fsm: entity work.vga_fsm(fsm)
+	vga_fsm: entity vga.vga_fsm(fsm)
 		port map (
 			vga_clock => vga_clock,
 			reset => reset,

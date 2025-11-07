@@ -16,28 +16,13 @@ use ads.ads_fixed.all;
 use work.pipeline_pkg.all;
 use work.color_data.all;
 
-entity write_file_example is
+entity fractal_testbench is
     generic (
         clock_period: time := 10 ps
     );
-end entity write_file_example;
+end entity fractal_testbench;
 
-architecture demo of write_file_example is
-
-    component test_toplevel is
-        generic (
-            stage_count: natural := 16
-        );
-        port (
-            clock: in std_logic;
-            reset: in std_logic;
-            fractal_select: in std_logic;
-            h_sync: out std_logic;
-            v_sync: out std_logic;
-            vga_color: out rgb_color
-        );
-    end component test_toplevel;
-
+architecture demo of fractal_testbench is
     constant h_res: positive :=
         vga_res_default.horizontal.active +
         vga_res_default.horizontal.front_porch +
@@ -68,9 +53,9 @@ begin
             stage_count => 16
         )
         port map (
-            clock => clock,
+            vga_clock => clock,
             reset => reset,
-            fractal_select => '1',
+            f_select => '1',
             h_sync => h_sync,
             v_sync => v_sync,
             vga_color => vga_color
@@ -87,12 +72,12 @@ begin
         write(out_file, "15" & lf);
 
         reset <= '0';
-        wait for rising_edge(clock);
-        wait for rising_edge(clock);
+        wait until rising_edge(clock);
+        wait until rising_edge(clock);
         reset <= '1';
 
         for i in 0 to 15 loop
-            wait for rising_edge(clock);
+            wait until rising_edge(clock);
         end loop;
 
         for j in 0 to v_res - 1 loop
@@ -107,7 +92,7 @@ begin
                         integer'image(b));
                 writeline(out_file, out_line);
 
-                wait for rising_edge(clock);
+                wait until rising_edge(clock);
             end loop;
         end loop;
 

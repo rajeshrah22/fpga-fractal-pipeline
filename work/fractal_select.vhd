@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library ads;
-use ads.ads_complex_pkg.all;
 use ads.ads_fixed.all;
+use ads.ads_complex_pkg.all;
 
 
 entity fractal_select is
@@ -18,7 +18,7 @@ entity fractal_select is
 end entity ;
 
 architecture fract_slct of fractal_select is
-	constant julia_c: ads_complex := ads_cmplx(to_ads_sfixed(0), to_ads_sfixed(2));
+	constant julia_c: ads_complex := ads_cmplx(to_ads_sfixed(0), to_ads_sfixed(0));
 begin
 	find_fractal: process(clock, reset) is
 	begin
