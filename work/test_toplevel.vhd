@@ -34,7 +34,9 @@ architecture toplevel of test_toplevel is
 	signal complex_coordinate: ads_complex;
 
 	type pipeline_data_array_t is array (natural range <>) of pipeline_data;
-	signal pipeline: pipeline_data_array_t(0 to stage_count - 1);
+
+	-- pipeline data array needs to be stage_count + 1 in length
+	signal pipeline: pipeline_data_array_t(0 to stage_count);
 	
 	signal seed_z, seed_c: ads_complex;
 begin
@@ -77,7 +79,7 @@ begin
 			z => seed_z
 		);
 
-	cmplx_pipeline: for idx in 1 to stage_count - 2 generate
+	cmplx_pipeline: for idx in 1 to stage_count generate
 		pipeline_stage_x: entity work.pipeline_stage
 			generic map (
 				threshold => to_ads_sfixed(4),
@@ -87,11 +89,11 @@ begin
 				clock => vga_clock,
 				-- clock => clock,
 				reset => reset,
-				stage_input => pipeline(idx),
-				stage_output => pipeline(idx + 1)
+				stage_input => pipeline(idx - 1),
+				stage_output => pipeline(idx)
 			);
 	end generate cmplx_pipeline;
 
 
-	vga_color <= color_black when pipeline(stage_count - 1).stage_overflow else color_blue;
+	vga_color <= color_black when pipeline(stage_count).stage_overflow else color_blue;
 end architecture toplevel;

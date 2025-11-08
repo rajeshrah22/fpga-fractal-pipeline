@@ -94,7 +94,7 @@ begin
 	-- TODO: modify stage to take in stage_data.stage_valid
 	stage_output.stage_data <= stage_data_out2 when stage_overflow_out2 else stage_number;
 
-	stage_output.stage_overflow <= stage_overflow_out2 when abs2z_out > threshold else false;
+	stage_output.stage_overflow <= true when (abs2z_out > threshold) else false;
 
 	stage_output.c <= cout2;
 	stage_output.z <= z2plusc_out;
