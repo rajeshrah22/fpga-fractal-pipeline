@@ -76,7 +76,7 @@ begin
         wait until rising_edge(clock);
         reset <= '1';
 
-        for i in 0 to 15 loop
+        for i in 0 to 34 loop
             wait until rising_edge(clock);
         end loop;
 
