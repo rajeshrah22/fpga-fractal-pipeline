@@ -55,7 +55,7 @@ begin
         port map (
             vga_clock => clock,
             reset => reset,
-            f_select => '1',
+            f_select => '0',
             h_sync => h_sync,
             v_sync => v_sync,
             vga_color => vga_color

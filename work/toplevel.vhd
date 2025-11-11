@@ -91,5 +91,5 @@ begin
 	end generate cmplx_pipeline;
 
 
-	vga_color <= color_black when pipeline(stage_count - 1).stage_overflow else color_blue;
+	vga_color <= color_black when pipeline(stage_count).stage_overflow else color_blue;
 end architecture toplevel;

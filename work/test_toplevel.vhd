@@ -14,11 +14,10 @@ use work.color_data.all;
 
 entity test_toplevel is
 	generic (
-		stage_count: natural := 16
+		stage_count: natural := 20
 	);
 	port (
-		vga_clock: in std_logic;
-		-- clock: in std_logic;
+		clock: in std_logic;
 		reset: in std_logic;
 		f_select: in std_logic;
 		h_sync: out std_logic;
@@ -30,7 +29,7 @@ end entity test_toplevel;
 architecture toplevel of test_toplevel is
 	signal coordinate_out: coordinate;
 	signal point_valid: boolean;
-	-- signal vga_clock: std_logic;
+	signal vga_clock: std_logic;
 	signal complex_coordinate: ads_complex;
 
 	type pipeline_data_array_t is array (natural range <>) of pipeline_data;
@@ -45,11 +44,11 @@ begin
 	pipeline(0).stage_overflow <= false;
 	pipeline(0).stage_data <= 0;
 
-	-- pll_inst : entity work.pll
-		-- port map (
-			-- inclk0	 => clock,
-			-- c0	 => vga_clock
-		-- );
+	pll_inst : entity work.pll
+		port map (
+			inclk0	 => clock,
+			c0	 => vga_clock
+		);
 
 	vga_fsm: entity vga.vga_fsm(fsm)
 		port map (
@@ -79,18 +78,17 @@ begin
 			z => seed_z
 		);
 
-	cmplx_pipeline: for idx in 1 to stage_count generate
+	cmplx_pipeline: for idx in 0 to stage_count - 1 generate
 		pipeline_stage_x: entity work.pipeline_stage
 			generic map (
-				threshold => to_ads_sfixed(4),
+				threshold => to_ads_sfixed(24),
 				stage_number => idx
 			)
 			port map (
 				clock => vga_clock,
-				-- clock => clock,
 				reset => reset,
-				stage_input => pipeline(idx - 1),
-				stage_output => pipeline(idx)
+				stage_input => pipeline(idx),
+				stage_output => pipeline(idx + 1)
 			);
 	end generate cmplx_pipeline;
 
