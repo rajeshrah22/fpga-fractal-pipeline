@@ -1,5 +1,5 @@
 # ads-fractal-pipeline
-Fractal generation using complex number computational pipeline in VHDL
+Fractal generation using complex number computational pipeline on an FPGA.
 
 ### Mandelbrot Set
 ![Mandelbrot Set](PXL_20251110_235528471.jpg)
